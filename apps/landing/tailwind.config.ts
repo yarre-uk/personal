@@ -17,10 +17,8 @@ export default {
       center: true,
     },
     extend: {
-      colors: {
-      },
-      borderRadius: {
-      },
+      colors: {},
+      borderRadius: {},
       screens: {
         xs: '375px',
         sm: '480px',
