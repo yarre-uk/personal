@@ -2,14 +2,24 @@
   "name": "personal",
   "author": "Yarre",
   "scripts": {
-    "serve:landing": "nx serve landing",
-    "build:landing": "nx build landing"
+    "srv:lan": "nx serve landing",
+    "srv:api": "nx serve api",
+    "bld:lan": "nx build landing",
+    "bld:api": "nx build api",
+    "prm:gen": "prisma generate --schema=./libs/data-access/prisma",
+    "prm:mig:dev": "prisma migrate dev --schema=./libs/data-access/prisma",
+    "prm:mig:dep": "prisma migrate deploy --schema=./libs/data-access/prisma",
+    "prm:std": "prisma studio --schema=./libs/data-access/prisma",
+    "prm:db:push": "prisma db push --schema=./libs/data-access/prisma"
   },
   "packageManager": "pnpm@10.14.0",
   "dependencies": {
     "@nestjs/common": "^11.0.0",
     "@nestjs/core": "^11.0.0",
     "@nestjs/platform-express": "^11.0.0",
+    "@nestjs/swagger": "^11.2.0",
+    "@prisma/client": "^6.13.0",
+    "prisma": "^6.13.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-router-dom": "6.29.0",
