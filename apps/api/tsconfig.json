@@ -10,9 +10,18 @@
     ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "target": "es2021"
+    "target": "es2021",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ],
+      "@/*": [
+        "../../libs/*"
+      ],
+    },
   },
   "include": [
     "src/**/*.ts"
-  ]
+, "app.module.ts"  ]
 }

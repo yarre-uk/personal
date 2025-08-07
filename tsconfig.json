@@ -15,9 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "application": ["libs/application/src/index.ts"],
       "data-access": ["libs/data-access/src/index.ts"],
-      "domain": ["libs/domain/src/index.ts"],
       "shared": ["libs/shared/src/index.ts"],
       "ui": ["libs/ui/src/index.ts"]
     }
