@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 
+import { TodoModule } from './modules/todo/todo.module';
+
 import { DataAccessModule } from '@/data-access';
 
 @Module({
-  imports: [DataAccessModule],
+  imports: [DataAccessModule, TodoModule],
   controllers: [],
   providers: [],
 })

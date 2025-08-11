@@ -16,8 +16,8 @@
       "~/*": [
         "./src/*"
       ],
-      "@/*": [
-        "../../libs/*"
+      "@/data-access": [
+        "../../libs/data-access/src/index.ts"
       ],
     },
   },

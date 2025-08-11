@@ -5,6 +5,8 @@ export interface ITodoFilters {
   title?: string;
 }
 
+export const TODO_REPOSITORY_KEY = 'ITodoRepository';
+
 export interface ITodoRepository {
   findAll(): Promise<TodoEntity[]>;
   findById(id: number): Promise<TodoEntity | null>;

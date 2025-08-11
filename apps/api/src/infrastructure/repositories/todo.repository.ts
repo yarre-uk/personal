@@ -1,12 +1,11 @@
+import { Injectable } from '@nestjs/common';
 import { Todo } from '@prisma/client';
 
 import { PrismaService } from '@/data-access';
-import {
-  ITodoFilters,
-  ITodoRepository,
-} from '~/application/interfaces/todo.repository';
+import { ITodoFilters, ITodoRepository } from '~/application/interfaces';
 import { TodoEntity } from '~/domain';
 
+@Injectable()
 export class TodoRepository implements ITodoRepository {
   constructor(private readonly prisma: PrismaService) {}
 
@@ -39,10 +38,7 @@ export class TodoRepository implements ITodoRepository {
 
   async create(todo: TodoEntity): Promise<TodoEntity> {
     const createdTodo = await this.prisma.todo.create({
-      data: {
-        title: todo.title,
-        completed: todo.completed,
-      },
+      data: todo,
     });
 
     return this.mapToEntity(createdTodo);
@@ -51,10 +47,7 @@ export class TodoRepository implements ITodoRepository {
   async update(todo: TodoEntity): Promise<TodoEntity> {
     const data = await this.prisma.todo.update({
       where: { id: todo.id },
-      data: {
-        title: todo.title,
-        completed: todo.completed,
-      },
+      data: todo,
     });
 
     return this.mapToEntity(data);
