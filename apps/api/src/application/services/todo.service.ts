@@ -33,6 +33,7 @@ export class TodoService implements ITodoService {
 
   async findByFilters(filters: ITodoFilters): Promise<TodoResponseDTO[]> {
     const todos = await this.todoRepository.findByFilters(filters);
+
     return todos.map((todo) => toTodoResponseDTO(todo));
   }
 

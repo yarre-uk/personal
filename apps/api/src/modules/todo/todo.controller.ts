@@ -1,4 +1,14 @@
-import { Controller, Get, Inject } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import {
@@ -6,6 +16,7 @@ import {
   TODO_SERVICE_KEY,
   TodoCreateDTO,
   TodoFiltersDTO,
+  TodoResponseDTO,
   TodoUpdateDTO,
 } from '../../application/interfaces';
 
@@ -18,37 +29,37 @@ export class TodoController {
 
   @Get()
   @ApiOperation({ summary: 'Get all todos' })
-  async findAll() {
+  findAll(): Promise<TodoResponseDTO[]> {
     return this.todoService.findAll();
   }
 
-  @Get(':id')
+  @Get('by-id/:id')
   @ApiOperation({ summary: 'Get todo by ID' })
-  async findById(id: number) {
+  async findById(@Param('id') id: number) {
     return this.todoService.findById(id);
   }
 
   @Get('filters')
   @ApiOperation({ summary: 'Get todos by filters' })
-  async findByFilters(filters: TodoFiltersDTO) {
+  async findByFilters(@Query() filters: TodoFiltersDTO) {
     return this.todoService.findByFilters(filters);
   }
 
-  @Get('create')
+  @Post('create')
   @ApiOperation({ summary: 'Create a new todo' })
-  async create(todo: TodoCreateDTO) {
+  async create(@Body() todo: TodoCreateDTO) {
     return this.todoService.create(todo);
   }
 
-  @Get('update')
+  @Put('update')
   @ApiOperation({ summary: 'Update an existing todo' })
-  async update(todo: TodoUpdateDTO) {
+  async update(@Body() todo: TodoUpdateDTO) {
     return this.todoService.update(todo);
   }
 
-  @Get('delete/:id')
+  @Delete('delete/:id')
   @ApiOperation({ summary: 'Delete a todo by ID' })
-  async delete(id: number) {
+  async delete(@Param('id') id: number) {
     return this.todoService.delete(id);
   }
 }
