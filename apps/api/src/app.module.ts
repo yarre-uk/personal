@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { TodoModule } from './modules/todo/todo.module';
+import { TodoModule } from './presentation/todo/todo.module';
 
 import { DataAccessModule } from '@/data-access';
 
