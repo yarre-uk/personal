@@ -1,5 +1,5 @@
 model Todo {
-  id        Int      @id @default(autoincrement())
+  id        String   @db.Uuid @id 
   title     String
   completed Boolean  @default(false)
   createdAt DateTime @default(now())

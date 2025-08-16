@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 import { ITodoFilters } from './todo.repository';
 
@@ -12,9 +12,9 @@ export class TodoCreateDTO {
 }
 
 export class TodoUpdateDTO {
-  @ApiProperty({ example: 1 })
-  @IsNumber()
-  id: number;
+  @ApiProperty({ example: '123e4567-e89b-12d3-a456-426614174000' })
+  @IsString()
+  id: string;
 
   @ApiProperty({ example: 'Updated Title' })
   @IsString()
@@ -24,8 +24,8 @@ export class TodoUpdateDTO {
 
 export class TodoResponseDTO {
   @ApiProperty({ example: 1 })
-  @IsNumber()
-  id: number;
+  @IsString()
+  id: string;
 
   @ApiProperty({ example: 'Base Title' })
   @IsString()
@@ -51,9 +51,9 @@ export class TodoFiltersDTO implements ITodoFilters {
 export function toTodoResponseDTO(todoEntity: TodoEntity): TodoResponseDTO {
   const todoResponseDTO = new TodoResponseDTO();
 
-  todoResponseDTO.id = todoEntity.id;
-  todoResponseDTO.title = todoEntity.title;
-  todoResponseDTO.completed = todoEntity.completed;
+  todoResponseDTO.id = todoEntity.getId();
+  todoResponseDTO.title = todoEntity.getTitle().getValue();
+  todoResponseDTO.completed = todoEntity.getCompleted();
 
   return todoResponseDTO;
 }

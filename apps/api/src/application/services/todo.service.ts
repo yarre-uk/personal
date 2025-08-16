@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { v7 as uuidv7 } from 'uuid';
 
 import {
   ITodoFilters,
@@ -12,6 +13,7 @@ import {
 } from '../interfaces';
 
 import { TodoEntity } from '~/domain';
+import { TodoTitle } from '~/domain/value-objects';
 
 @Injectable()
 export class TodoService implements ITodoService {
@@ -25,7 +27,7 @@ export class TodoService implements ITodoService {
     return todos.map((todo) => toTodoResponseDTO(todo));
   }
 
-  async findById(id: number): Promise<TodoResponseDTO | null> {
+  async findById(id: string): Promise<TodoResponseDTO | null> {
     const todo = await this.todoRepository.findById(id);
 
     return todo ? toTodoResponseDTO(todo) : null;
@@ -38,20 +40,26 @@ export class TodoService implements ITodoService {
   }
 
   async create(todo: TodoCreateDTO): Promise<TodoResponseDTO> {
-    const todoEntity = new TodoEntity(undefined, todo.title);
+    const todoEntity = new TodoEntity({
+      id: uuidv7(),
+      title: new TodoTitle(todo.title),
+    });
 
     const createdTodo = await this.todoRepository.create(todoEntity);
     return toTodoResponseDTO(createdTodo);
   }
 
   async update(todo: TodoUpdateDTO): Promise<TodoResponseDTO> {
-    const todoEntity = new TodoEntity(todo.id, todo.title);
+    const todoEntity = new TodoEntity({
+      id: todo.id,
+      title: new TodoTitle(todo.title || ''),
+    });
 
     const updatedTodo = await this.todoRepository.update(todoEntity);
     return toTodoResponseDTO(updatedTodo);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     return this.todoRepository.delete(id);
   }
 }

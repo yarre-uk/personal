@@ -4,6 +4,7 @@ import { Todo } from '@prisma/client';
 import { PrismaService } from '@/data-access';
 import { ITodoFilters, ITodoRepository } from '~/application/interfaces';
 import { TodoEntity } from '~/domain';
+import { TodoTitle } from '~/domain/value-objects';
 
 @Injectable()
 export class TodoRepository implements ITodoRepository {
@@ -15,7 +16,7 @@ export class TodoRepository implements ITodoRepository {
     return todos.map((todo) => this.mapToEntity(todo));
   }
 
-  async findById(id: number): Promise<TodoEntity | null> {
+  async findById(id: string): Promise<TodoEntity | null> {
     const todo = await this.prisma.todo.findUnique({
       where: { id },
     });
@@ -38,7 +39,13 @@ export class TodoRepository implements ITodoRepository {
 
   async create(todo: TodoEntity): Promise<TodoEntity> {
     const createdTodo = await this.prisma.todo.create({
-      data: todo,
+      data: {
+        id: todo.getId(),
+        title: todo.getTitle().getValue(),
+        completed: todo.getCompleted(),
+        createdAt: todo.getCreatedAt(),
+        updatedAt: todo.getUpdatedAt(),
+      },
     });
 
     return this.mapToEntity(createdTodo);
@@ -46,26 +53,29 @@ export class TodoRepository implements ITodoRepository {
 
   async update(todo: TodoEntity): Promise<TodoEntity> {
     const data = await this.prisma.todo.update({
-      where: { id: todo.id },
-      data: todo,
+      where: { id: todo.getId() },
+      data: {
+        title: todo.getTitle().getValue(),
+        completed: todo.getCompleted(),
+      },
     });
 
     return this.mapToEntity(data);
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: string): Promise<void> {
     await this.prisma.todo.delete({
       where: { id },
     });
   }
 
   private mapToEntity(data: Todo): TodoEntity {
-    return new TodoEntity(
-      data.id,
-      data.title,
-      data.completed,
-      data.createdAt,
-      data.updatedAt
-    );
+    return new TodoEntity({
+      id: data.id,
+      title: new TodoTitle(data.title),
+      completed: data.completed,
+      createdAt: data.createdAt,
+      updatedAt: data.updatedAt,
+    });
   }
 }

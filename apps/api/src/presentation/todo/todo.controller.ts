@@ -5,8 +5,8 @@ import {
   Get,
   Inject,
   Param,
+  Patch,
   Post,
-  Put,
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -37,7 +37,7 @@ export class TodoController {
   @Get('by-id/:id')
   @ApiOperation({ summary: 'Get todo by ID' })
   @ApiResponse({ status: 200, type: TodoResponseDTO })
-  async findById(@Param('id') id: number) {
+  async findById(@Param('id') id: string) {
     return this.todoService.findById(id);
   }
 
@@ -55,7 +55,7 @@ export class TodoController {
     return this.todoService.create(todo);
   }
 
-  @Put('update')
+  @Patch('update')
   @ApiOperation({ summary: 'Update an existing todo' })
   @ApiResponse({ status: 200, type: TodoResponseDTO })
   async update(@Body() todo: TodoUpdateDTO) {
@@ -65,7 +65,7 @@ export class TodoController {
   @Delete('delete/:id')
   @ApiOperation({ summary: 'Delete a todo by ID' })
   @ApiResponse({ status: 200, description: 'Todo deleted successfully' })
-  async delete(@Param('id') id: number) {
+  async delete(@Param('id') id: string) {
     return this.todoService.delete(id);
   }
 }
