@@ -47,11 +47,23 @@ export class TodoEntity {
     return this._updatedAt;
   }
 
-  changeCompletionStatus(completed: boolean): void {
-    this._completed = completed;
-  }
-
   updateTitle(title: TodoTitle): void {
     this._title = title;
+  }
+
+  markAsCompleted(): void {
+    if (this._completed) {
+      throw new Error('Todo is already completed');
+    }
+
+    this._completed = true;
+  }
+
+  markAsIncomplete(): void {
+    if (!this._completed) {
+      throw new Error('Todo is already incomplete');
+    }
+
+    this._completed = false;
   }
 }

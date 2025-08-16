@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Todo } from '@prisma/client';
+
+import { TodoFactory } from './todo.factory';
 
 import { PrismaService } from '@/data-access';
 import { ITodoFilters, ITodoRepository } from '~/application/interfaces';
 import { TodoEntity } from '~/domain';
-import { TodoTitle } from '~/domain/value-objects';
 
 @Injectable()
 export class TodoRepository implements ITodoRepository {
@@ -13,7 +13,7 @@ export class TodoRepository implements ITodoRepository {
   async findAll(): Promise<TodoEntity[]> {
     const todos = await this.prisma.todo.findMany();
 
-    return todos.map((todo) => this.mapToEntity(todo));
+    return todos.map((todo) => TodoFactory.fromPersistence(todo));
   }
 
   async findById(id: string): Promise<TodoEntity | null> {
@@ -21,7 +21,7 @@ export class TodoRepository implements ITodoRepository {
       where: { id },
     });
 
-    return todo ? this.mapToEntity(todo) : null;
+    return todo ? TodoFactory.fromPersistence(todo) : null;
   }
 
   async findByFilters(filters: ITodoFilters): Promise<TodoEntity[]> {
@@ -34,7 +34,7 @@ export class TodoRepository implements ITodoRepository {
       },
     });
 
-    return todos.map((todo) => this.mapToEntity(todo));
+    return todos.map((todo) => TodoFactory.fromPersistence(todo));
   }
 
   async create(todo: TodoEntity): Promise<TodoEntity> {
@@ -48,7 +48,7 @@ export class TodoRepository implements ITodoRepository {
       },
     });
 
-    return this.mapToEntity(createdTodo);
+    return TodoFactory.fromPersistence(createdTodo);
   }
 
   async update(todo: TodoEntity): Promise<TodoEntity> {
@@ -60,22 +60,12 @@ export class TodoRepository implements ITodoRepository {
       },
     });
 
-    return this.mapToEntity(data);
+    return TodoFactory.fromPersistence(data);
   }
 
   async delete(id: string): Promise<void> {
     await this.prisma.todo.delete({
       where: { id },
-    });
-  }
-
-  private mapToEntity(data: Todo): TodoEntity {
-    return new TodoEntity({
-      id: data.id,
-      title: new TodoTitle(data.title),
-      completed: data.completed,
-      createdAt: data.createdAt,
-      updatedAt: data.updatedAt,
     });
   }
 }

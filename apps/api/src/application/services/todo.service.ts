@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { v7 as uuidv7 } from 'uuid';
 
 import {
   ITodoFilters,
@@ -14,6 +13,7 @@ import {
 
 import { TodoEntity } from '~/domain';
 import { TodoTitle } from '~/domain/value-objects';
+import { TodoFactory } from '~/infrastructure';
 
 @Injectable()
 export class TodoService implements ITodoService {
@@ -40,10 +40,7 @@ export class TodoService implements ITodoService {
   }
 
   async create(todo: TodoCreateDTO): Promise<TodoResponseDTO> {
-    const todoEntity = new TodoEntity({
-      id: uuidv7(),
-      title: new TodoTitle(todo.title),
-    });
+    const todoEntity = TodoFactory.createNew(todo.title);
 
     const createdTodo = await this.todoRepository.create(todoEntity);
     return toTodoResponseDTO(createdTodo);
