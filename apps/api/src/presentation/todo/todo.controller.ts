@@ -39,7 +39,7 @@ export class TodoController {
   @Get('by-id/:id')
   @ApiOperation({ summary: 'Get todo by ID' })
   @ApiResponse({ status: 200, type: TodoResponseDTO })
-  async findById(@Param('id') { id }: ByIdParams) {
+  async findById(@Param() { id }: ByIdParams) {
     return this.todoService.findById(id);
   }
 
@@ -67,7 +67,7 @@ export class TodoController {
   @Delete('delete/:id')
   @ApiOperation({ summary: 'Delete a todo by ID' })
   @ApiResponse({ status: 200, description: 'Todo deleted successfully' })
-  async delete(@Param('id') id: string) {
+  async delete(@Param() { id }: ByIdParams) {
     return this.todoService.delete(id);
   }
 }
