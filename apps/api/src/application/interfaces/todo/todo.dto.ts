@@ -36,8 +36,8 @@ export class TodoResponseDTO {
   @IsString()
   title: string;
 
-  @ApiProperty({ example: 'Base Description' })
-  @IsString()
+  @ApiProperty({ example: false })
+  @IsBoolean()
   completed: boolean;
 }
 
