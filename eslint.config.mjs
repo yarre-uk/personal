@@ -13,6 +13,7 @@ export default [
       '**/dist',
       '**/vite.config.*.timestamp*',
       '**/vitest.config.*.timestamp*',
+      'node_modules',
     ],
   },
   {
@@ -90,7 +91,7 @@ export default [
   // TypeScript-specific rules
   {
     rules: {
-      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/consistent-type-imports': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {

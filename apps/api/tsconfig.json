@@ -1,0 +1,21 @@
+{
+  "extends": "../../tsconfig.json",
+  "files": [],
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "outDir": "../../dist/out-tsc",
+    "module": "commonjs",
+    "types": ["node"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "target": "es2021",
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./src/*"],
+      "@/data-access": ["../../libs/data-access/src/index.ts"],
+      "@/shared": ["../../libs/shared/src/index.ts"],
+      "@/infrastructure": ["../../libs/infrastructure/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "app.module.ts"]
+}
