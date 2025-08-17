@@ -20,6 +20,8 @@ import {
   TodoUpdateDTO,
 } from '../../application/interfaces';
 
+import { ByIdParams } from '@/infrastructure';
+
 @ApiTags('todo')
 @Controller('todo')
 export class TodoController {
@@ -37,7 +39,7 @@ export class TodoController {
   @Get('by-id/:id')
   @ApiOperation({ summary: 'Get todo by ID' })
   @ApiResponse({ status: 200, type: TodoResponseDTO })
-  async findById(@Param('id') id: string) {
+  async findById(@Param('id') { id }: ByIdParams) {
     return this.todoService.findById(id);
   }
 

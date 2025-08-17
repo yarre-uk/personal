@@ -11,6 +11,7 @@ import {
   toTodoResponseDTO,
 } from '../interfaces';
 
+import { isDefined } from '@/shared';
 import { TodoNotFoundException } from '~/domain/exceptions';
 import { TodoTitle } from '~/domain/value-objects';
 import { TodoFactory } from '~/infrastructure';
@@ -30,7 +31,7 @@ export class TodoService implements ITodoService {
   async findById(id: string): Promise<TodoResponseDTO | null> {
     const todo = await this.todoRepository.findById(id);
 
-    if (!todo) {
+    if (!isDefined(todo)) {
       throw new TodoNotFoundException(id);
     }
 
@@ -53,7 +54,7 @@ export class TodoService implements ITodoService {
   async update(todo: TodoUpdateDTO): Promise<TodoResponseDTO> {
     const existingTodo = await this.todoRepository.findById(todo.id);
 
-    if (!existingTodo) {
+    if (!isDefined(existingTodo)) {
       throw new TodoNotFoundException(todo.id);
     }
 
@@ -76,7 +77,7 @@ export class TodoService implements ITodoService {
   async delete(id: string): Promise<void> {
     const todo = await this.todoRepository.findById(id);
 
-    if (!todo) {
+    if (!isDefined(todo)) {
       throw new TodoNotFoundException(id);
     }
 
