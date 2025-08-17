@@ -20,6 +20,11 @@ export class TodoUpdateDTO {
   @IsString()
   @IsOptional()
   title?: string;
+
+  @ApiProperty({ example: true })
+  @IsBoolean()
+  @IsOptional()
+  completed?: boolean;
 }
 
 export class TodoResponseDTO {

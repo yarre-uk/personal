@@ -11,7 +11,7 @@ import {
   toTodoResponseDTO,
 } from '../interfaces';
 
-import { TodoEntity } from '~/domain';
+import { TodoNotFoundException } from '~/domain/exceptions';
 import { TodoTitle } from '~/domain/value-objects';
 import { TodoFactory } from '~/infrastructure';
 
@@ -30,7 +30,11 @@ export class TodoService implements ITodoService {
   async findById(id: string): Promise<TodoResponseDTO | null> {
     const todo = await this.todoRepository.findById(id);
 
-    return todo ? toTodoResponseDTO(todo) : null;
+    if (!todo) {
+      throw new TodoNotFoundException(id);
+    }
+
+    return toTodoResponseDTO(todo);
   }
 
   async findByFilters(filters: ITodoFilters): Promise<TodoResponseDTO[]> {
@@ -47,16 +51,35 @@ export class TodoService implements ITodoService {
   }
 
   async update(todo: TodoUpdateDTO): Promise<TodoResponseDTO> {
-    const todoEntity = new TodoEntity({
-      id: todo.id,
-      title: new TodoTitle(todo.title || ''),
-    });
+    const existingTodo = await this.todoRepository.findById(todo.id);
 
-    const updatedTodo = await this.todoRepository.update(todoEntity);
+    if (!existingTodo) {
+      throw new TodoNotFoundException(todo.id);
+    }
+
+    if (todo.title) {
+      existingTodo.updateTitle(new TodoTitle(todo.title));
+    }
+
+    if (todo.completed !== undefined) {
+      if (todo.completed) {
+        existingTodo.markAsCompleted();
+      } else {
+        existingTodo.markAsIncomplete();
+      }
+    }
+
+    const updatedTodo = await this.todoRepository.update(existingTodo);
     return toTodoResponseDTO(updatedTodo);
   }
 
   async delete(id: string): Promise<void> {
+    const todo = await this.todoRepository.findById(id);
+
+    if (!todo) {
+      throw new TodoNotFoundException(id);
+    }
+
     return this.todoRepository.delete(id);
   }
 }

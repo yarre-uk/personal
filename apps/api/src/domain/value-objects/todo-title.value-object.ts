@@ -1,12 +1,31 @@
+import { InvalidTodoTitleException } from '../exceptions';
+
 export class TodoTitle {
-  private _title: string;
+  private readonly _title: string;
 
   constructor(title: string) {
+    this.validate(title);
+    this._title = title.trim();
+  }
+
+  private validate(title: string): void {
     if (!title || title.trim().length === 0) {
-      throw new Error('Todo title cannot be empty');
+      throw new InvalidTodoTitleException(title, 'Title cannot be empty');
     }
 
-    this._title = title;
+    if (title.trim().length > 200) {
+      throw new InvalidTodoTitleException(
+        title,
+        'Title cannot exceed 200 characters'
+      );
+    }
+
+    if (title.trim().length < 3) {
+      throw new InvalidTodoTitleException(
+        title,
+        'Title must be at least 3 characters long'
+      );
+    }
   }
 
   getValue(): string {

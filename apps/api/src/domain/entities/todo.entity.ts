@@ -1,3 +1,7 @@
+import {
+  TodoAlreadyCompletedException,
+  TodoAlreadyIncompletedException,
+} from '../exceptions';
 import { TodoTitle } from '../value-objects';
 
 export class TodoEntity {
@@ -53,7 +57,7 @@ export class TodoEntity {
 
   markAsCompleted(): void {
     if (this._completed) {
-      throw new Error('Todo is already completed');
+      throw new TodoAlreadyCompletedException(this.getId());
     }
 
     this._completed = true;
@@ -61,7 +65,7 @@ export class TodoEntity {
 
   markAsIncomplete(): void {
     if (!this._completed) {
-      throw new Error('Todo is already incomplete');
+      throw new TodoAlreadyIncompletedException(this.getId());
     }
 
     this._completed = false;
